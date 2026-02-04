@@ -40,6 +40,7 @@ const blogPosts: BlogPost[] = [
         title: "Vercel 部署心得",
         description: "JobBuff 从本地开发到 Vercel 部署的完整复盘，含踩坑指南和版本迭代历程",
         cover: "🚀",
+        coverImage: "/images/blog-vercel.png",
         tag: "项目实战",
         tagColor: "from-[#6EC5FF] to-[#4DA8FF]",
         link: "https://my.feishu.cn/wiki/BcSTwBsbhi77pHk0aXLc6g88nxh",
