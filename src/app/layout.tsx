@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Abril_Fatface, Merriweather, Noto_Sans_SC, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CursorSparkle from "@/components/CursorSparkle";
+import ChatWidget from "@/components/ChatWidget";
 
 const abrilFatface = Abril_Fatface({
   variable: "--font-abril-fatface",
@@ -51,6 +52,7 @@ export default function RootLayout({
       >
         <CursorSparkle />
         {children}
+        <ChatWidget />
       </body>
     </html>
   );
