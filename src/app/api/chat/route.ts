@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
             body: JSON.stringify({
                 bot_id: COZE_BOT_ID,
                 user_id: "web_user_" + Date.now(),
-                stream: true, // 必须开启流式，否则 v3 是异步任务
+                stream: true,
                 auto_save_history: true,
                 additional_messages: [
                     {
@@ -55,6 +55,7 @@ export async function POST(request: NextRequest) {
 
         if (!response.ok) {
             const errorText = await response.text();
+            console.error("Coze API Error:", errorText);
             throw new Error(`API error (${response.status}): ${errorText}`);
         }
 
@@ -62,40 +63,65 @@ export async function POST(request: NextRequest) {
             throw new Error("No response body");
         }
 
-        // 手动解析流
+        // 手动解析流 (带缓冲处理 + 标准 SSE 解析)
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let fullReply = "";
+        let buffer = "";
+        let currentEvent = ""; // 记录当前事件类型
 
         while (true) {
             const { done, value } = await reader.read();
             if (done) break;
 
             const chunk = decoder.decode(value, { stream: true });
-            const lines = chunk.split('\n');
+            buffer += chunk;
+
+            const lines = buffer.split('\n');
+            buffer = lines.pop() || "";
 
             for (const line of lines) {
-                if (line.startsWith('data:')) {
+                const trimmedLine = line.trim();
+
+                // 1. 捕捉 event 行
+                if (trimmedLine.startsWith('event:')) {
+                    currentEvent = trimmedLine.substring(6).trim();
+                }
+
+                // 2. 捕捉 data 行
+                else if (trimmedLine.startsWith('data:')) {
                     try {
-                        const dataStr = line.substring(5).trim();
+                        const dataStr = trimmedLine.substring(5).trim();
                         if (!dataStr) continue;
                         const data = JSON.parse(dataStr);
 
-                        // 监听消息增量或完成事件
-                        // v3 流式中，type='answer' 的消息是我们需要的
-                        if (data.event === 'conversation.message.delta' && data.data?.type === 'answer') {
-                            fullReply += data.data.content;
+                        // 匹配逻辑：根据 capture 到的 event 来判断
+                        if (currentEvent === 'conversation.message.delta' && data.type === 'answer') {
+                            fullReply += data.content;
                         }
-                        // 或者 completed 事件
-                        if (data.event === 'conversation.message.completed' && data.data?.type === 'answer') {
-                            // 如果之前没拼凑完整，这里可以直接用 completed 的 content
-                            // 但为了保险，delta 拼接已经足够
+
+                        // 兜底：complete 事件
+                        if (currentEvent === 'conversation.message.completed' && data.type === 'answer') {
+                            if (!fullReply && data.content) {
+                                fullReply = data.content;
+                            }
                         }
-                    } catch (e) {
-                        // 忽略解析错误
+                    } catch (e: any) {
+                        console.error(`Parse error: ${e.message}`);
                     }
                 }
             }
+        }
+
+        // 处理缓冲区剩余内容
+        if (buffer.trim().startsWith('data:')) {
+            try {
+                const dataStr = buffer.trim().substring(5).trim();
+                const data = JSON.parse(dataStr);
+                if (currentEvent === 'conversation.message.delta' && data.type === 'answer') {
+                    fullReply += data.content;
+                }
+            } catch (e) { }
         }
 
         if (!fullReply) {
