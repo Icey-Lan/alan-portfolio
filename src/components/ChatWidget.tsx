@@ -3,6 +3,8 @@
 import { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Send, Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 interface Message {
     id: string;
@@ -136,11 +138,29 @@ export default function ChatWidget() {
                                 >
                                     <div
                                         className={`max-w-[80%] px-4 py-2.5 rounded-2xl text-sm leading-relaxed ${message.role === "user"
-                                                ? "bg-[var(--primary)] text-white rounded-br-md"
-                                                : "bg-white border border-[var(--border)] text-[var(--text-primary)] rounded-bl-md shadow-sm"
+                                            ? "bg-[var(--primary)] text-white rounded-br-md"
+                                            : "bg-white border border-[var(--border)] text-[var(--text-primary)] rounded-bl-md shadow-sm"
                                             }`}
                                     >
-                                        {message.content}
+                                        {message.role === "assistant" ? (
+                                            <div className="prose prose-sm max-w-none break-words">
+                                                <ReactMarkdown
+                                                    remarkPlugins={[remarkGfm]}
+                                                    components={{
+                                                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                                                        ul: ({ children }) => <ul className="list-disc pl-4 mb-2 space-y-1">{children}</ul>,
+                                                        ol: ({ children }) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
+                                                        li: ({ children }) => <li className="marker:text-gray-400">{children}</li>,
+                                                        strong: ({ children }) => <span className="font-bold text-[var(--primary)]">{children}</span>,
+                                                        a: ({ href, children }) => <a href={href} target="_blank" rel="noopener noreferrer" className="text-[var(--primary)] underline hover:text-[var(--primary-dark)]">{children}</a>,
+                                                    }}
+                                                >
+                                                    {message.content}
+                                                </ReactMarkdown>
+                                            </div>
+                                        ) : (
+                                            message.content
+                                        )}
                                     </div>
                                 </div>
                             ))}
