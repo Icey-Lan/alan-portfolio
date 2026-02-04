@@ -9,7 +9,7 @@ export async function POST(request: NextRequest) {
         }
 
         // 扣子 API 配置
-        const COZE_API_URL = process.env.COZE_API_URL || "https://api.coze.cn/open_api/v2/chat";
+        const COZE_API_URL = process.env.COZE_API_URL || "https://api.coze.cn/v3/chat";
         const COZE_BOT_ID = process.env.COZE_BOT_ID;
         const COZE_API_TOKEN = process.env.COZE_API_TOKEN;
 
@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ reply });
         }
 
-        // 调用扣子 API
+        // 调用扣子 v3 API（非流式）
         const response = await fetch(COZE_API_URL, {
             method: "POST",
             headers: {
@@ -44,20 +44,38 @@ export async function POST(request: NextRequest) {
             },
             body: JSON.stringify({
                 bot_id: COZE_BOT_ID,
-                user: "web_user",
-                query: message,
+                user_id: "web_user_" + Date.now(),
                 stream: false,
+                auto_save_history: true,
+                additional_messages: [
+                    {
+                        role: "user",
+                        content: message,
+                        content_type: "text",
+                    },
+                ],
             }),
         });
 
         const data = await response.json();
 
+        // 检查错误
         if (data.code !== 0) {
+            console.error("Coze API error:", data);
             throw new Error(data.msg || "Coze API error");
         }
 
         // 提取回复内容
-        const reply = data.messages?.find((m: { role: string }) => m.role === "assistant")?.content || "抱歉，我暂时无法回答这个问题。";
+        let reply = "抱歉，我暂时无法回答这个问题。";
+
+        if (data.data && data.data.messages) {
+            const assistantMessage = data.data.messages.find(
+                (m: { role: string; type: string }) => m.role === "assistant" && m.type === "answer"
+            );
+            if (assistantMessage) {
+                reply = assistantMessage.content;
+            }
+        }
 
         return NextResponse.json({ reply });
 
