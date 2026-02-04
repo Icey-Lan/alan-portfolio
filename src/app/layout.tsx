@@ -1,24 +1,24 @@
 import type { Metadata } from "next";
-import { Outfit, Noto_Sans_SC, Caveat, JetBrains_Mono } from "next/font/google";
+import { Abril_Fatface, Merriweather, Noto_Sans_SC, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CursorSparkle from "@/components/CursorSparkle";
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const abrilFatface = Abril_Fatface({
+  variable: "--font-abril-fatface",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400"],
+});
+
+const merriweather = Merriweather({
+  variable: "--font-merriweather",
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
 });
 
 const notoSansSC = Noto_Sans_SC({
   variable: "--font-noto-sans-sc",
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700"],
-});
-
-const caveat = Caveat({
-  variable: "--font-caveat",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -47,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="zh-CN" className="scroll-smooth">
       <body
-        className={`${outfit.variable} ${notoSansSC.variable} ${caveat.variable} ${jetbrainsMono.variable} antialiased`}
+        className={`${abrilFatface.variable} ${merriweather.variable} ${notoSansSC.variable} ${jetbrainsMono.variable} antialiased`}
       >
         <CursorSparkle />
         {children}

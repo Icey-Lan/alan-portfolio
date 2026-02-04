@@ -8,7 +8,7 @@ const navItems = [
     { label: "首页", href: "#hero" },
     { label: "关于", href: "#about" },
     { label: "项目", href: "#projects" },
-    { label: "博客", href: "#blog" },
+    { label: "博客", href: "/blog" },
     { label: "联系", href: "#contact" },
 ];
 
@@ -53,13 +53,13 @@ export default function Navbar() {
                         <Link
                             key={item.href}
                             href={item.href}
-                            className={`relative px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${isActive ? "text-white" : "text-white/60 hover:text-white/90"
+                            className={`relative px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${isActive ? "text-[var(--primary)]" : "text-[var(--text-muted)] hover:text-[var(--text-primary)]"
                                 }`}
                         >
                             {isActive && (
                                 <motion.span
                                     layoutId="activeNav"
-                                    className="absolute inset-0 bg-white/10 rounded-full"
+                                    className="absolute inset-0 bg-[var(--primary)]/10 rounded-full"
                                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
                                 />
                             )}

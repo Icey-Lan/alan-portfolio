@@ -6,27 +6,18 @@ interface Particle {
     x: number;
     y: number;
     size: number;
-    color: string;
-    alpha: number;
-    decay: number;
-    vx: number;
-    vy: number;
+    speedX: number;
+    speedY: number;
+    opacity: number;
+    rotation: number;
+    rotationSpeed: number;
 }
-
-const colors = [
-    "#6EC5FF", // 天蓝
-    "#FFB3D9", // 粉紫
-    "#C7B8EA", // 淡紫
-    "#4DA8FF", // 深蓝
-    "#FF8AC4", // 玫红
-    "#FFFFFF", // 白色
-];
 
 export default function CursorSparkle() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const particlesRef = useRef<Particle[]>([]);
     const mouseRef = useRef({ x: 0, y: 0 });
-    const animationRef = useRef<number>(0);
+    const animationRef = useRef<number>();
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -36,86 +27,126 @@ export default function CursorSparkle() {
         if (!ctx) return;
 
         // 设置画布尺寸
-        const resizeCanvas = () => {
+        const resize = () => {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         };
-        resizeCanvas();
-        window.addEventListener("resize", resizeCanvas);
+        resize();
+        window.addEventListener("resize", resize);
 
-        // 鼠标移动时生成粒子
+        // 鼠标移动时添加粒子
         const handleMouseMove = (e: MouseEvent) => {
             mouseRef.current = { x: e.clientX, y: e.clientY };
 
-            // 生成多个粒子形成烟花效果
-            for (let i = 0; i < 3; i++) {
-                const angle = Math.random() * Math.PI * 2;
-                const speed = Math.random() * 2;
+            // 每次移动添加 1-2 个星星粒子
+            for (let i = 0; i < 2; i++) {
                 particlesRef.current.push({
-                    x: e.clientX,
-                    y: e.clientY,
-                    size: Math.random() * 4 + 2,
-                    color: colors[Math.floor(Math.random() * colors.length)],
-                    alpha: 1,
-                    decay: Math.random() * 0.02 + 0.02,
-                    vx: Math.cos(angle) * speed,
-                    vy: Math.sin(angle) * speed,
+                    x: e.clientX + (Math.random() - 0.5) * 20,
+                    y: e.clientY + (Math.random() - 0.5) * 20,
+                    size: Math.random() * 8 + 4,
+                    speedX: (Math.random() - 0.5) * 2,
+                    speedY: (Math.random() - 0.5) * 2 - 1,
+                    opacity: 1,
+                    rotation: Math.random() * Math.PI * 2,
+                    rotationSpeed: (Math.random() - 0.5) * 0.2,
                 });
             }
 
-            // 限制粒子数量避免性能问题
-            if (particlesRef.current.length > 150) {
-                particlesRef.current = particlesRef.current.slice(-100);
+            // 限制粒子数量
+            if (particlesRef.current.length > 50) {
+                particlesRef.current = particlesRef.current.slice(-50);
             }
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+
+        // 绘制星星
+        const drawStar = (
+            ctx: CanvasRenderingContext2D,
+            x: number,
+            y: number,
+            size: number,
+            rotation: number,
+            opacity: number
+        ) => {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.rotate(rotation);
+            ctx.globalAlpha = opacity;
+
+            // 使用深蓝色
+            const gradient = ctx.createRadialGradient(0, 0, 0, 0, 0, size);
+            gradient.addColorStop(0, "#1E40AF");
+            gradient.addColorStop(0.5, "#2563EB");
+            gradient.addColorStop(1, "rgba(30, 64, 175, 0)");
+
+            // 绘制四角星
+            ctx.beginPath();
+            const spikes = 4;
+            const outerRadius = size;
+            const innerRadius = size * 0.4;
+
+            for (let i = 0; i < spikes * 2; i++) {
+                const radius = i % 2 === 0 ? outerRadius : innerRadius;
+                const angle = (i * Math.PI) / spikes;
+                const px = Math.cos(angle) * radius;
+                const py = Math.sin(angle) * radius;
+
+                if (i === 0) {
+                    ctx.moveTo(px, py);
+                } else {
+                    ctx.lineTo(px, py);
+                }
+            }
+
+            ctx.closePath();
+            ctx.fillStyle = gradient;
+            ctx.fill();
+
+            // 添加发光效果
+            ctx.shadowColor = "#2563EB";
+            ctx.shadowBlur = 15;
+            ctx.fill();
+
+            ctx.restore();
         };
 
         // 动画循环
         const animate = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // 更新和绘制粒子
             particlesRef.current = particlesRef.current.filter((particle) => {
-                // 更新位置
-                particle.x += particle.vx;
-                particle.y += particle.vy;
-
-                // 更新透明度（淡出效果）
-                particle.alpha -= particle.decay;
-
-                // 缩小粒子
+                particle.x += particle.speedX;
+                particle.y += particle.speedY;
+                particle.opacity -= 0.02;
                 particle.size *= 0.98;
+                particle.rotation += particle.rotationSpeed;
 
-                if (particle.alpha <= 0 || particle.size < 0.5) {
-                    return false;
+                if (particle.opacity > 0 && particle.size > 0.5) {
+                    drawStar(
+                        ctx,
+                        particle.x,
+                        particle.y,
+                        particle.size,
+                        particle.rotation,
+                        particle.opacity
+                    );
+                    return true;
                 }
-
-                // 绘制粒子
-                ctx.save();
-                ctx.globalAlpha = particle.alpha;
-                ctx.fillStyle = particle.color;
-                ctx.beginPath();
-                ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-                ctx.fill();
-
-                // 添加发光效果
-                ctx.shadowBlur = 10;
-                ctx.shadowColor = particle.color;
-                ctx.fill();
-                ctx.restore();
-
-                return true;
+                return false;
             });
 
             animationRef.current = requestAnimationFrame(animate);
         };
 
-        window.addEventListener("mousemove", handleMouseMove);
         animate();
 
         return () => {
-            window.removeEventListener("resize", resizeCanvas);
+            window.removeEventListener("resize", resize);
             window.removeEventListener("mousemove", handleMouseMove);
-            cancelAnimationFrame(animationRef.current);
+            if (animationRef.current) {
+                cancelAnimationFrame(animationRef.current);
+            }
         };
     }, []);
 
@@ -123,7 +154,6 @@ export default function CursorSparkle() {
         <canvas
             ref={canvasRef}
             className="fixed inset-0 pointer-events-none z-50"
-            style={{ mixBlendMode: "screen" }}
         />
     );
 }

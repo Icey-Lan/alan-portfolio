@@ -80,10 +80,13 @@ export default function Contact() {
                     viewport={{ once: true }}
                     className="text-center mb-12"
                 >
-                    <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-                        <span className="gradient-text">联系我</span>
+                    <h2
+                        className="text-4xl lg:text-5xl font-bold mb-4 text-[var(--primary)]"
+                        style={{ fontFamily: "'Abril Fatface', serif" }}
+                    >
+                        联系我
                     </h2>
-                    <p className="text-white/60 text-lg">
+                    <p className="text-[var(--text-muted)] text-lg">
                         期待与你建立连接，共同探索 AI 的无限可能
                     </p>
                 </motion.div>
@@ -102,18 +105,18 @@ export default function Contact() {
                                 onClick={() => handleClick(item, index)}
                                 whileHover={{ scale: 1.02 }}
                                 whileTap={{ scale: 0.98 }}
-                                className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-[#6EC5FF]/30 transition-all cursor-pointer group"
+                                className="flex flex-col items-center gap-3 p-6 rounded-2xl bg-[var(--background-alt)] border border-[var(--border)] hover:border-[var(--primary)] transition-all cursor-pointer group"
                             >
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#6EC5FF]/20 to-[#FFB3D9]/20 flex items-center justify-center text-[#6EC5FF] group-hover:scale-110 transition-transform">
+                                <div className="w-12 h-12 rounded-full bg-[var(--primary)]/10 flex items-center justify-center text-[var(--primary)] group-hover:scale-110 transition-transform">
                                     {item.icon}
                                 </div>
-                                <span className="text-white font-medium">{item.label}</span>
-                                <span className="text-white/50 text-sm flex items-center gap-1">
+                                <span className="text-[var(--text-primary)] font-medium">{item.label}</span>
+                                <span className="text-[var(--text-muted)] text-sm flex items-center gap-1">
                                     {item.action === "copy" ? (
                                         copiedIndex === index ? (
                                             <>
-                                                <Check className="w-3 h-3 text-green-400" />
-                                                <span className="text-green-400">已复制</span>
+                                                <Check className="w-3 h-3 text-green-500" />
+                                                <span className="text-green-500">已复制</span>
                                             </>
                                         ) : (
                                             <>
@@ -137,11 +140,11 @@ export default function Contact() {
                     viewport={{ once: true }}
                     className="mt-24 text-center"
                 >
-                    <div className="glass inline-block px-8 py-4 rounded-full">
-                        <p className="text-white/60 text-sm">
-                            © 2026 阿兰🦋. 保留所有权利。
+                    <div className="inline-block px-8 py-4 rounded-full border border-[var(--border)]">
+                        <p className="text-[var(--text-muted)] text-sm">
+                            © 2026 阿兰. 保留所有权利。
                         </p>
-                        <p className="text-white/40 text-xs mt-1">
+                        <p className="text-[var(--text-light)] text-xs mt-1">
                             Vibe Coded with Claude
                         </p>
                     </div>

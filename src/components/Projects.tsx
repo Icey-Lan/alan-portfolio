@@ -3,7 +3,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, X } from "lucide-react";
-import Image from "next/image";
 
 interface Project {
     id: string;
@@ -56,12 +55,12 @@ const projects: Project[] = [
         description: "使用 AI 编程工具（Claude Code + Antigravity）从零构建的个人作品集网站，展示 Vibe Coding 的开发理念。",
         highlights: [
             "AI 辅助编程开发",
-            "梦幻渐变设计风格",
-            "毛玻璃 UI 效果",
+            "复古印刷设计风格",
+            "纸张纹理质感",
             "流畅动画体验",
         ],
         technologies: ["Next.js", "Tailwind", "Framer Motion"],
-        image: "/images/portfolio.png",
+        image: "/images/projects/portfolio-cover.png",
         link: "/",
     },
 ];
@@ -94,10 +93,13 @@ export default function Projects() {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-                        <span className="gradient-text">我的作品</span>
+                    <h2
+                        className="text-4xl lg:text-5xl font-bold mb-4 text-[var(--primary)]"
+                        style={{ fontFamily: "'Abril Fatface', serif" }}
+                    >
+                        我的作品
                     </h2>
-                    <p className="text-white/60 text-lg">
+                    <p className="text-[var(--text-muted)] text-lg">
                         用 AI 打造的产品与工具
                     </p>
                 </motion.div>
@@ -115,10 +117,10 @@ export default function Projects() {
                             key={project.id}
                             variants={cardVariants}
                             onClick={() => setSelectedProject(project)}
-                            className="glass overflow-hidden group cursor-pointer hover:-translate-y-2 transition-all duration-300 hover:shadow-[0_20px_40px_rgba(110,197,255,0.2)]"
+                            className="glass overflow-hidden group cursor-pointer hover:-translate-y-2 transition-all duration-300 hover:shadow-lg"
                         >
                             {/* 项目图片 */}
-                            <div className="relative h-48 bg-gradient-to-br from-[#6EC5FF]/20 to-[#FFB3D9]/20 overflow-hidden">
+                            <div className="relative h-48 bg-[var(--background-alt)] overflow-hidden">
                                 {project.image ? (
                                     <img
                                         src={project.image}
@@ -131,22 +133,22 @@ export default function Projects() {
                                     </div>
                                 )}
                                 {/* 悬浮时显示查看详情 */}
-                                <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <div className="absolute inset-0 bg-[var(--primary)]/80 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <span className="text-white font-medium">查看详情 →</span>
                                 </div>
                             </div>
 
                             {/* 项目信息 */}
                             <div className="p-6">
-                                <h3 className="text-xl font-semibold text-white mb-1">{project.title}</h3>
-                                <p className="text-white/60 text-sm mb-4">{project.subtitle}</p>
+                                <h3 className="text-xl font-semibold text-[var(--text-primary)] mb-1">{project.title}</h3>
+                                <p className="text-[var(--text-muted)] text-sm mb-4">{project.subtitle}</p>
 
                                 {/* 功能亮点标签 */}
                                 <div className="flex flex-wrap gap-2">
                                     {project.highlights.slice(0, 2).map((highlight, index) => (
                                         <span
                                             key={index}
-                                            className="px-2 py-1 text-xs rounded-full bg-[#6EC5FF]/10 text-[#6EC5FF] border border-[#6EC5FF]/20"
+                                            className="px-2 py-1 text-xs rounded-full bg-[var(--primary)]/10 text-[var(--primary)] border border-[var(--primary)]/20"
                                         >
                                             {highlight}
                                         </span>
@@ -166,41 +168,41 @@ export default function Projects() {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setSelectedProject(null)}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+                        className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4"
                     >
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95, y: 20 }}
                             animate={{ opacity: 1, scale: 1, y: 0 }}
                             exit={{ opacity: 0, scale: 0.95, y: 20 }}
                             onClick={(e) => e.stopPropagation()}
-                            className="glass max-w-4xl w-full max-h-[90vh] overflow-y-auto"
+                            className="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
                         >
                             {/* 关闭按钮 */}
                             <button
                                 onClick={() => setSelectedProject(null)}
-                                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/20 transition-colors cursor-pointer z-10"
+                                className="absolute top-4 right-4 w-10 h-10 rounded-full bg-[var(--background-alt)] flex items-center justify-center hover:bg-[var(--border)] transition-colors cursor-pointer z-10"
                             >
-                                <X className="w-5 h-5 text-white" />
+                                <X className="w-5 h-5 text-[var(--text-primary)]" />
                             </button>
 
                             <div className="grid lg:grid-cols-2 gap-0">
                                 {/* 左侧：项目信息 */}
                                 <div className="p-8">
-                                    <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-[#6EC5FF]/20 text-[#6EC5FF] mb-4">
+                                    <span className="inline-block px-3 py-1 text-xs font-medium rounded-full bg-[var(--primary)]/10 text-[var(--primary)] mb-4">
                                         {selectedProject.id}
                                     </span>
 
-                                    <h3 className="text-3xl font-bold text-white mb-2">
+                                    <h3 className="text-3xl font-bold text-[var(--text-primary)] mb-2">
                                         {selectedProject.title}
                                     </h3>
-                                    <p className="text-white/60 mb-6">{selectedProject.subtitle}</p>
+                                    <p className="text-[var(--text-muted)] mb-6">{selectedProject.subtitle}</p>
 
                                     <div className="mb-6">
-                                        <h4 className="text-sm text-white/60 mb-3">功能亮点</h4>
+                                        <h4 className="text-sm text-[var(--text-muted)] mb-3">功能亮点</h4>
                                         <ul className="space-y-2">
                                             {selectedProject.highlights.map((highlight, index) => (
-                                                <li key={index} className="flex items-start gap-2 text-white/80">
-                                                    <span className="text-[#6EC5FF] mt-1">●</span>
+                                                <li key={index} className="flex items-start gap-2 text-[var(--text-primary)]">
+                                                    <span className="text-[var(--primary)] mt-1">●</span>
                                                     {highlight}
                                                 </li>
                                             ))}
@@ -208,12 +210,12 @@ export default function Projects() {
                                     </div>
 
                                     <div className="mb-6">
-                                        <h4 className="text-sm text-white/60 mb-3">TECHNOLOGIES</h4>
+                                        <h4 className="text-sm text-[var(--text-muted)] mb-3">TECHNOLOGIES</h4>
                                         <div className="flex flex-wrap gap-2">
                                             {selectedProject.technologies.map((tech, index) => (
                                                 <span
                                                     key={index}
-                                                    className="px-3 py-1.5 text-sm rounded-lg bg-white/10 text-white/80 border border-white/10"
+                                                    className="px-3 py-1.5 text-sm rounded-lg bg-[var(--background-alt)] text-[var(--text-primary)] border border-[var(--border)]"
                                                 >
                                                     {tech}
                                                 </span>
@@ -228,7 +230,7 @@ export default function Projects() {
                                                 href={selectedProject.link}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#6EC5FF] to-[#C7B8EA] rounded-full font-medium text-white hover:shadow-[0_0_30px_rgba(110,197,255,0.5)] transition-all cursor-pointer"
+                                                className="flex items-center gap-2 px-5 py-2.5 bg-[var(--primary)] rounded-full font-medium text-white hover:bg-[var(--primary-dark)] transition-all cursor-pointer"
                                             >
                                                 VIEW PROJECT
                                                 <ExternalLink className="w-4 h-4" />
@@ -239,7 +241,7 @@ export default function Projects() {
                                                 href={selectedProject.github}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="flex items-center gap-2 px-5 py-2.5 glass rounded-full font-medium text-white/90 hover:bg-white/20 transition-all cursor-pointer"
+                                                className="flex items-center gap-2 px-5 py-2.5 border-2 border-[var(--border)] rounded-full font-medium text-[var(--text-primary)] hover:border-[var(--primary)] hover:text-[var(--primary)] transition-all cursor-pointer"
                                             >
                                                 <Github className="w-4 h-4" />
                                                 GitHub
@@ -249,9 +251,9 @@ export default function Projects() {
                                 </div>
 
                                 {/* 右侧：项目介绍 */}
-                                <div className="p-8 bg-white/5">
+                                <div className="p-8 bg-[var(--background-alt)]">
                                     {/* 项目图片 */}
-                                    <div className="relative h-48 bg-gradient-to-br from-[#6EC5FF]/20 to-[#FFB3D9]/20 rounded-xl mb-6 overflow-hidden">
+                                    <div className="relative h-48 bg-white rounded-xl mb-6 overflow-hidden shadow-md">
                                         {selectedProject.image ? (
                                             <img
                                                 src={selectedProject.image}
@@ -266,11 +268,11 @@ export default function Projects() {
                                     </div>
 
                                     <div>
-                                        <h4 className="text-lg font-semibold text-white mb-3 flex items-center gap-2">
-                                            <span className="w-1 h-5 bg-[#6EC5FF] rounded-full"></span>
+                                        <h4 className="text-lg font-semibold text-[var(--text-primary)] mb-3 flex items-center gap-2">
+                                            <span className="w-1 h-5 bg-[var(--primary)] rounded-full"></span>
                                             About Project
                                         </h4>
-                                        <p className="text-white/70 leading-relaxed">
+                                        <p className="text-[var(--text-muted)] leading-relaxed">
                                             {selectedProject.description}
                                         </p>
                                     </div>
