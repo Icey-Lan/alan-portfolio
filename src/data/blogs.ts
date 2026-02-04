@@ -48,4 +48,16 @@ export const blogPosts: BlogPost[] = [
         date: "2026-01-28",
         aiSummary: "本文复盘了 AI 求职助手 JobBuff 的开发与部署全过程，详细记录了在 Vibe Coding 训练营中从零构建 Web 应用的技术细节。文章重点分享了 Vercel 部署过程中遇到的常见坑点及解决方案，并提供了实用的部署前检查清单，是 AI 辅助编程与云端部署的实战指南。",
     },
+    {
+        id: "4",
+        title: "JobBuff (职场外挂)：AI 时代的求职通关攻略",
+        description: "从「启动困难」到「全副武装」——基于 Vibe Coding 的产品独立开发复盘",
+        cover: "🛡️",
+        coverImage: "/images/blogs/jobbuff-review-cover.png",
+        tag: "深度复盘",
+        tagColor: "from-[#8B5CF6] to-[#6D28D9]", // Purple gradient
+        link: "https://my.feishu.cn/wiki/ZgIHwgcrqiaMOTkwvTkc2ccXnzg",
+        date: "2026-02-04",
+        aiSummary: "这是一份关于 JobBuff（职场外挂）的深度复盘。作者作为一个非技术背景的文科生，利用 AI（Vibe Coding）独立开发了一款游戏化的 AI 求职辅助工具。文章详细讲述了产品从痛点发现（ADHD、启动困难）到解决方案（情报侦察、装备锻造等RPG任务流）的设计思考，分享了 Prompt 工程和 PRD 管理的实战经验，以及对 AI 时代「人机协作」模式的深刻反思。",
+    },
 ];
