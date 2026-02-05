@@ -46,7 +46,7 @@ const projects: Project[] = [
         ],
         technologies: ["React 18", "Vite", "Python FastAPI", "Playwright"],
         image: "/images/jobhunter.png",
-        github: "https://github.com/Icey-Lan/jobhunter",
+        github: "https://github.com/Icey-Lan/job-hunter-web",
     },
     {
         id: "PRJ-03",
