@@ -11,6 +11,13 @@ const XIcon = () => (
     </svg>
 );
 
+// 微信图标
+const WeChatIcon = () => (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+        <path d="M8.5 2C4.08 2 0.5 5.36 0.5 9.5c0 2.44 1.27 4.62 3.25 6.05.04.54-.53 1.84-.71 2.45-.06.2.14.36.3.25 1-.68 2.46-1.63 2.91-1.93.7.17 1.45.28 2.25.28 4.42 0 8-3.36 8-7.5S12.92 2 8.5 2zM16.5 6c-2.76 0-5 2.01-5 4.5 0 2.49 2.24 4.5 5 4.5.57 0 1.12-.11 1.62-.3.31.25 1.25.86 1.94 1.33.1.07.24-.04.2-.18-.12-.41-.5-1.28-.48-1.64 1.35-.97 2.22-2.43 2.22-4.08 0-2.49-2.24-4.5-5-4.5z" />
+    </svg>
+);
+
 interface ContactItem {
     icon: React.ReactNode;
     label: string;
@@ -32,6 +39,12 @@ const contactItems: ContactItem[] = [
         value: "github.com/Icey-Lan",
         action: "link",
         link: "https://github.com/Icey-Lan",
+    },
+    {
+        icon: <WeChatIcon />,
+        label: "微信",
+        value: "ALanCanbebetter",
+        action: "copy",
     },
     {
         icon: <BookOpen className="w-5 h-5" />,
