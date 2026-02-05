@@ -61,7 +61,7 @@ const projects: Project[] = [
         ],
         technologies: ["Next.js", "Tailwind", "Framer Motion"],
         image: "/images/projects/portfolio-cover.png",
-        link: "/",
+        link: "https://alan-portfolio-rose.vercel.app/",
     },
 ];
 
