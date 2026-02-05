@@ -30,7 +30,7 @@ const projects: Project[] = [
         ],
         technologies: ["Next.js 15", "React 19", "Gemini AI", "Supabase"],
         image: "/images/jobbuff.png",
-        link: "https://jobbuff.vercel.app",
+        link: "https://job-buff.vercel.app",
         github: "https://github.com/Icey-Lan/JobBuff",
     },
     {
