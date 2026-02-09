@@ -44,7 +44,7 @@ export default function Hero() {
                         transition={{ delay: 0.4 }}
                         className="text-2xl lg:text-3xl text-[var(--text-primary)] mb-5"
                     >
-                        一名前数据产品裸辞成为 AI Builder
+                        曾做数据产品，现在用 AI 创造产品，探索创作的边界
                     </motion.p>
 
                     {/* 标签 */}
